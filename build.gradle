@@ -30,25 +30,27 @@ dependencies {
 
     // querydsl library 추가
     implementation 'com.querydsl:querydsl-jpa'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
 }
 
 test {
     useJUnitPlatform()
 }
 
-// querydsl 추가 시작
+// querydsl 추가 시작. (인텔리제이 전용)
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
     jpa = true
-    querydslSourcesDir = querydslDir
+    querydslSourcesDir = querydslDir // Q.java 파일 위치 지정
 }
 
 sourceSets {
-    main.java.srcDir querydslDir
+    main.java.srcDir querydslDir // import 를 자동으로 수행할 수 있도록 설정
 }
 
 configurations {
+    // 애너테이션 프로세서, 플러그인과 함께 자동 Q.Java 파일 생성
     querydsl.extendsFrom compileClasspath
 }
 
