@@ -416,6 +416,9 @@ public class QuerydslBasicTest {
     @Test
     @Transactional
     public void fetchJoinNo() {
+        em.flush();
+        em.clear();
+
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
         QTeam team = QTeam.team;
         QMember member = QMember.member;
@@ -425,7 +428,7 @@ public class QuerydslBasicTest {
                                 .where(member.username.eq("member1"))
                                 .fetchOne();
 
-        boolean loaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam());
+        boolean loaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam()); // 초기화가 되었는가?
         assertThat(loaded).as("페치 조인 미적용").isFalse();
     }
 
@@ -441,10 +444,11 @@ public class QuerydslBasicTest {
 
         Member findMember = queryFactory
                 .selectFrom(member)
+                .join(member.team, team).fetchJoin()
                 .where(member.username.eq("member1"))
                 .fetchOne();
 
         boolean loaded = emf.getPersistenceUnitUtil().isLoaded(findMember.getTeam());
-        assertThat(loaded).as("페치 조인 미적용").isFalse();
+        assertThat(loaded).as("페치 조인 적용").isTrue();
     }
 }
