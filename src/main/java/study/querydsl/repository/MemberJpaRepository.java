@@ -1,25 +1,19 @@
 package study.querydsl.repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import study.querydsl.dto.MemberSearchCondition;
 import study.querydsl.entity.Member;
 import study.querydsl.entity.MemberTeamDto;
 import study.querydsl.entity.QMemberTeamDto;
-import study.querydsl.entity.QTeam;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.util.ObjectUtils.isEmpty;
 import static org.springframework.util.StringUtils.hasText;
-import static org.springframework.util.StringUtils.isEmpty;
 import static study.querydsl.entity.QMember.member;
 import static study.querydsl.entity.QTeam.team;
 
@@ -84,11 +78,11 @@ public class MemberJpaRepository {
 
         return queryFactory
                 .select(new QMemberTeamDto(
-                    member.id.as("memberId"),
-                    member.username,
-                    member.age,
-                    team.id.as("teamId"),
-                    team.name.as("teamName")))
+                        member.id.as("memberId"),
+                        member.username,
+                        member.age,
+                        team.id.as("teamId"),
+                        team.name.as("teamName")))
                 .from(member)
                 .leftJoin(member.team, team) // QTeam.team
                 .where(builder)
@@ -111,9 +105,9 @@ public class MemberJpaRepository {
                 .from(member)
                 .leftJoin(member.team, team) // QTeam.team
                 .where(usernameEq(condition.getUsername()),
-                       teamNameEq(condition.getTeamName()),
-                       ageLoe(condition.getAgeLoe()),
-                       ageGoe(condition.getAgeGoe()))
+                        teamNameEq(condition.getTeamName()),
+                        ageLoe(condition.getAgeLoe()),
+                        ageGoe(condition.getAgeGoe()))
                 .fetch();
     }
 
